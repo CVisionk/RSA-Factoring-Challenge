@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <gmp.h>
+#include <string.h>
+#include <gmp.h>
+
+/**
+ * calculate_long - factorize big number
+ * @n: big number
+ * Return: 1 on success, 0 on fail.
+ */
+
+int calculate_long(mpz_t n)
+{
+	mpz_t i;
+	mpz_t rem;
+
+	mpz_init_set_ui(i, 2);
+	mpz_init(rem);
+
+	while (mpz_cmp(i, n) < 0)
+	{
+		mpz_mod(rem, n, i);
+		if (mpz_cmp_ui(rem, 0) == 0)
+		{
+			mpz_t quotient;
+
+			mpz_init(quotient);
+			mpz_tdiv_q(quotient, n, i);
+			gmp_printf("%Zd=%Zd*%Zd\n", n, quotient, i);
+			mpz_clears(i, rem, NULL);
+			return (1);
+		}
+		mpz_add_ui(i, i, 1);
+	}
+	mpz_clears(i, rem, NULL);
+	return (0);
+}
+
+/**
+ * calculate - factorize number
+ * @n: number
+ * Return: 1 on success, 0 on fail.
+ */
+
+int calculate(long long int n)
+{
+	for (long long int i = 2; i < n; i++)
+	{
+		if (n % i == 0)
+		{
+			printf("%lld=%lld*%lld\n", n, n / i, i);
+			return (1);
+		}
+	}
+
+	return (0);
+}
+
+/**
+ * _read - readfile
+ * @argv: arguements
+ */
+
+void _read(char argv[])
+{
+	FILE *fp;
+	char lines[100][100];
+	int line_count = 0;
+
+	fp = fopen(argv, "r");
+	if (fp == NULL)
+	{
+		printf("Error opening the file.\n");
+		return;
+	}
+
+	while (fgets(lines[line_count], 100, fp) != NULL && line_count < 100)
+	{
+		line_count++;
+	}
+
+	fclose(fp);
+	for (int i = 0; i < line_count; i++)
+	{
+		if (strlen(lines[i]) < 20)
+		{
+			long long int num = strtoll(lines[i], NULL, 10);
+
+			calculate(num);
+		} else
+		{
+			mpz_t num;
+
+			mpz_init(num);
+			mpz_set_str(num, lines[i], 10);
+			calculate_long(num);
+			mpz_clear(num);
+		}
+	}
+}
+
+/**
+ * main - entry point
+ * @argc: number of args
+ * @argv: array of args
+ * Return: 1 on success, 0 on fail.
+ */
+
+int main(int argc, char *argv[])
+{
+	if (argc == 1)
+	{
+		printf("No arguments provided.\n");
+	} else
+	{
+		for (int i = 1; i < argc; i++)
+			_read(argv[i]);
+	}
+	return (0);
+}
