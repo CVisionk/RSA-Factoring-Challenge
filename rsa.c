@@ -2,10 +2,7 @@
 #include <stdlib.h>
 #include <gmp.h>
 #include <string.h>
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wlong-long"
-
-long long strtoll(const char *nptr, char **endptr, int base);
+#include <gmp.h>
 
 /**
  * calculate_long - factorize big number
@@ -31,7 +28,6 @@ void calculate_long(mpz_t n)
 		}
 		mpz_add_ui(i, i, 1);
 	}
-	gmp_printf("%Zd=%Zd*%Zd\n", n, n, 1);
 	mpz_clears(i, rem, quotient, NULL);
 }
 
@@ -43,22 +39,14 @@ void calculate_long(mpz_t n)
 
 void calculate(long long int n)
 {
-	long long int i;
-	mpz_t num, num1, num2;
-
-	mpz_inits(num, num1, num2, NULL);
-	for (i = 2; i * i <= n; i++)
+	for (long long int i = 2; i * i < n; i++)
 	{
 		if (n % i == 0)
 		{
-			mpz_init_set_ui(num, n);
-			mpz_init_set_ui(num1, n / i);
-			mpz_init_set_ui(num2, i);
-			gmp_printf("%Zd=%Zd*%Zd\n", num, num1, num2);
+			printf("%lld=%lld*%lld\n", n, n / i, i);
 			return;
 		}
 	}
-	printf("%lld=%lld*%d\n", n, n, 1);
 
 }
 
@@ -72,7 +60,6 @@ void _read(char argv[])
 	FILE *fp;
 	char lines[100][100];
 	int line_count = 0;
-	int i;
 
 	fp = fopen(argv, "r");
 	if (fp == NULL)
@@ -87,7 +74,7 @@ void _read(char argv[])
 	}
 
 	fclose(fp);
-	for (i = 0; i < line_count; i++)
+	for (int i = 0; i < line_count; i++)
 	{
 		if (strlen(lines[i]) < 20)
 		{
@@ -115,14 +102,12 @@ void _read(char argv[])
 
 int main(int argc, char *argv[])
 {
-	int i;
 	if (argc == 1)
 	{
 		printf("No arguments provided.\n");
 		return (1);
 	}
-	for (i = 1; i < argc; i++)
+	for (int i = 1; i < argc; i++)
 			_read(argv[i]);
 	return (0);
 }
-#pragma GCC diagnostic pop
