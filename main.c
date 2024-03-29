@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <gmp.h>
 #include <string.h>
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wlong-long"
-
-long long strtoll(const char *nptr, char **endptr, int base);
 
 /**
  * calculate_long - factorize big number
@@ -124,4 +120,3 @@ int main(int argc, char *argv[])
 		_read(argv[i]);
 	return (0);
 }
-#pragma GCC diagnostic pop
