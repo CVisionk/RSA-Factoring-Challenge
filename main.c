@@ -39,17 +39,12 @@ void calculate_long(mpz_t n)
 void calculate(long long int n)
 {
 	long long int i;
-	mpz_t num, num1, num2;
 
-	mpz_inits(num, num1, num2, NULL);
 	for (i = 2; i * i <= n; i++)
 	{
 		if (n % i == 0)
 		{
-			mpz_init_set_ui(num, n);
-			mpz_init_set_ui(num1, n / i);
-			mpz_init_set_ui(num2, i);
-			gmp_printf("%Zd=%Zd*%Zd\n", num, num1, num2);
+			printf("%lld=%lld*%lld\n", n, n / i, i);
 			return;
 		}
 	}
