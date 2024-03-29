@@ -31,7 +31,6 @@ void calculate_long(mpz_t n)
 		}
 		mpz_add_ui(i, i, 1);
 	}
-	gmp_printf("%Zd=%Zd*%Zd\n", n, n, 1);
 	mpz_clears(i, rem, quotient, NULL);
 }
 
@@ -58,7 +57,6 @@ void calculate(long long int n)
 			return;
 		}
 	}
-	printf("%lld=%lld*%d\n", n, n, 1);
 
 }
 
@@ -116,13 +114,14 @@ void _read(char argv[])
 int main(int argc, char *argv[])
 {
 	int i;
+
 	if (argc == 1)
 	{
 		printf("No arguments provided.\n");
 		return (1);
 	}
 	for (i = 1; i < argc; i++)
-			_read(argv[i]);
+		_read(argv[i]);
 	return (0);
 }
 #pragma GCC diagnostic pop
