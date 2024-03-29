@@ -31,6 +31,27 @@ void calculate_long(mpz_t n)
 }
 
 /**
+ * calculate - factorize number
+ * @n: number
+ * Return: 1 on success, 0 on fail.
+ */
+
+void calculate(long long int n)
+{
+	long long int i;
+
+	for (i = 2; i * i <= n; i++)
+	{
+		if (n % i == 0)
+		{
+			printf("%lld=%lld*%lld\n", n, n / i, i);
+			return;
+		}
+	}
+
+}
+
+/**
  * _read - readfile
  * @argv: arguements
  */
@@ -56,13 +77,21 @@ void _read(char argv[])
 
 	fclose(fp);
 	for (i = 0; i < line_count; i++)
-	{	
-		mpz_t num;
+	{
+		if (strlen(lines[i]) < 20)
+		{
+			long long int num = strtoll(lines[i], NULL, 10);
 
-		mpz_init(num);
-		mpz_set_str(num, lines[i], 10);
-		calculate_long(num);
-		mpz_clear(num);
+			calculate(num);
+		} else
+		{
+			mpz_t num;
+
+			mpz_init(num);
+			mpz_set_str(num, lines[i], 10);
+			calculate_long(num);
+			mpz_clear(num);
+		}
 	}
 }
 

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Usage: script.sh <file>
+# Reads numbers from a file, factors them, and calculates the quotient of the number divided by its first factor.
+# Outputs as number=quotient
+
+if [ $# -ne 1 ]; then
+    echo 'Usage: factors <file>'
+    exit 1
+fi
+
+while IFS= read -r number; do
+    # Extract the factors excluding the number itself
+    # read -ra factors <<< "$(factor "$number" | cut -d' ' -f2-)"
+    read -ra factors <<< "$(factor "$number" | head -n 1 | cut -d' ' -f2-)"
+    firstfactor="${factors[0]}" # The first actual factor
+
+    if [ -z "$firstfactor" ]; then
+        # If no factors (number is 1 or a prime number), the "first factor" is the number itself
+        firstfactor=$number
+    fi
+
+    # Calculate the quotient of the number divided by its first factor
+    quotient=$((number / firstfactor))
+
+    # Output the number followed by the calculated quotient
+    echo "$number=$quotient*$firstfactor"
+done < "$1"
