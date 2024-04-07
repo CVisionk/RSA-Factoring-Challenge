@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# Function to check and rearrange factors if necessary
+check_factor() {
+    if [ $# -ne 3 ]; then
+        # If three arguments are not provided, compute the second factor
+        args=("$@")
+        count=0
+        num2=1
+        for a in ${args[*]}; do
+            if [ $count -gt 1 ]; then
+                num2=$(echo $a*$num2 | bc)
+            fi
+            count=$((count + 1))
+        done
+    else
+        num2=$3
+    fi
+
+    # Assign first and second factors
+    num1=$2
+    num=$(echo "$1" | tr ':' '=')
+
+    # Check if the second factor is greater than the first
+    result=$(echo "if($num2 > $num1) 1 else 0" | bc)
+    if ((result == 1)); then
+        # Swap factors if necessary
+        numcp=$num1
+        num1=$num2
+        num2=$numcp
+    fi
+
+    # Print the original number followed by the factors in the correct order
+    echo "$num$num1*$num2"
+}
+
+# Main script
+
+if [ $# -ne 1 ]; then
+    # Check if the correct number of arguments is provided
+    echo 'Usage: rsa <file>'
+    exit 1
+else
+    # Read numbers from the file and factorize them
+    while read i; do
+        result=$(factor "$i") # Factorize the number
+        check_factor $result  # Check and rearrange factors if necessary
+    done < "$1"
+fi
